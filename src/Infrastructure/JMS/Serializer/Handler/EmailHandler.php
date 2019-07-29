@@ -9,16 +9,14 @@ declare(strict_types = 1);
 
 namespace Ergonode\Account\Infrastructure\JMS\Serializer\Handler;
 
-use Ergonode\Account\Domain\ValueObject\Password;
+use Ergonode\Account\Domain\ValueObject\Email;
 use JMS\Serializer\Context;
 use JMS\Serializer\GraphNavigatorInterface;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\Serializer\Visitor\DeserializationVisitorInterface;
 use JMS\Serializer\Visitor\SerializationVisitorInterface;
 
-/**
- */
-class PasswordHandler implements SubscribingHandlerInterface
+class EmailHandler implements SubscribingHandlerInterface
 {
     /**
      * @return array
@@ -31,14 +29,14 @@ class PasswordHandler implements SubscribingHandlerInterface
         foreach ($formats as $format) {
             $methods[] = [
                 'direction' => GraphNavigatorInterface::DIRECTION_SERIALIZATION,
-                'type' => Password::class,
+                'type' => Email::class,
                 'format' => $format,
                 'method' => 'serialize',
             ];
 
             $methods[] = [
                 'direction' => GraphNavigatorInterface::DIRECTION_DESERIALIZATION,
-                'type' => Password::class,
+                'type' => Email::class,
                 'format' => $format,
                 'method' => 'deserialize',
             ];
@@ -49,17 +47,15 @@ class PasswordHandler implements SubscribingHandlerInterface
 
     /**
      * @param SerializationVisitorInterface $visitor
-     * @param Password                      $password
+     * @param Email                         $email
      * @param array                         $type
      * @param Context                       $context
      *
      * @return string
-     *
-     * @throws \Exception
      */
-    public function serialize(SerializationVisitorInterface $visitor, Password $password, array $type, Context $context): string
+    public function serialize(SerializationVisitorInterface $visitor, Email $email, array $type, Context $context): string
     {
-        return base64_encode($password->getValue());
+        return $email->getValue();
     }
 
     /**
@@ -68,13 +64,10 @@ class PasswordHandler implements SubscribingHandlerInterface
      * @param array                           $type
      * @param Context                         $context
      *
-     * @return Password
-     *
-     * @throws \Exception
+     * @return Email
      */
-    public function deserialize(DeserializationVisitorInterface $visitor, $data, array $type, Context $context): Password
+    public function deserialize(DeserializationVisitorInterface $visitor, $data, array $type, Context $context): Email
     {
-        $data = base64_decode($data);
-        return new Password($data);
+        return new Email($data);
     }
 }

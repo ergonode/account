@@ -5,17 +5,17 @@
  * See license.txt for license details.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Ergonode\Account\Domain\ValueObject;
 
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
+
 /**
  */
-class Password
+class Email
 {
-    public const MIN_LENGTH = 6;
-    public const MAX_LENGTH = 32;
-
     /**
      * @var string
      */
@@ -26,8 +26,10 @@ class Password
      */
     public function __construct(string $value)
     {
+        $value = mb_strtolower(trim($value));
+
         if (!self::isValid($value)) {
-            throw new \InvalidArgumentException('Value is not correct password');
+            throw new \InvalidArgumentException('Value is not correct email');
         }
 
         $this->value = $value;
@@ -46,7 +48,17 @@ class Password
      */
     public function __toString(): string
     {
-        return $this->getValue();
+        return $this->value;
+    }
+
+    /**
+     * @param Email $value
+     *
+     * @return bool
+     */
+    public function isEqual(Email $value): bool
+    {
+        return $value->getValue() === $this->value;
     }
 
     /**
@@ -56,8 +68,6 @@ class Password
      */
     public static function isValid(string $value): bool
     {
-        $length = mb_strlen($value);
-
-        return self::MIN_LENGTH <= $length && self::MAX_LENGTH >= $length;
+        return (new EmailValidator())->isValid($value, new RFCValidation());
     }
 }
