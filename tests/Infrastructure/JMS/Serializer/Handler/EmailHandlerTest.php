@@ -9,8 +9,8 @@ declare(strict_types = 1);
 
 namespace Ergonode\Account\Tests\Infrastructure\JMS\Serializer\Handler;
 
-use Ergonode\Account\Domain\ValueObject\Password;
-use Ergonode\Account\Infrastructure\JMS\Serializer\Handler\PasswordHandler;
+use Ergonode\Account\Domain\ValueObject\Email;
+use Ergonode\Account\Infrastructure\JMS\Serializer\Handler\EmailHandler;
 use JMS\Serializer\Context;
 use JMS\Serializer\Visitor\DeserializationVisitorInterface;
 use JMS\Serializer\Visitor\SerializationVisitorInterface;
@@ -19,13 +19,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  */
-class PasswordHandlerTest extends TestCase
+class EmailHandlerTest extends TestCase
 {
-    private const DECODED = 'test_value';
-    private const ENCODED = 'dGVzdF92YWx1ZQ==';
-
     /**
-     * @var PasswordHandler
+     * @var EmailHandler
      */
     private $handler;
 
@@ -48,7 +45,7 @@ class PasswordHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->handler = new PasswordHandler();
+        $this->handler = new EmailHandler();
         $this->serializerVisitor = $this->createMock(SerializationVisitorInterface::class);
         $this->deserializerVisitor = $this->createMock(DeserializationVisitorInterface::class);
         $this->context = $this->createMock(Context::class);
@@ -58,7 +55,7 @@ class PasswordHandlerTest extends TestCase
      */
     public function testConfiguration(): void
     {
-        $configurations = PasswordHandler::getSubscribingMethods();
+        $configurations = EmailHandler::getSubscribingMethods();
         foreach ($configurations as $configuration) {
             $this->assertArrayHasKey('direction', $configuration);
             $this->assertArrayHasKey('type', $configuration);
@@ -71,21 +68,25 @@ class PasswordHandlerTest extends TestCase
      */
     public function testSerialize(): void
     {
-        /** @var Password|MockObject $code */
-        $code = $this->createMock(Password::class);
-        $code->method('getValue')->willReturn(self::DECODED);
+        $value = 'test@ergonode.com';
+
+        /** @var Email|MockObject $code */
+        $code = $this->createMock(Email::class);
+        $code->method('getValue')->willReturn($value);
         $result = $this->handler->serialize($this->serializerVisitor, $code, [], $this->context);
 
-        $this->assertEquals(self::ENCODED, $result);
+        $this->assertEquals($value, $result);
     }
 
     /**
      */
     public function testDeserialize(): void
     {
-        $result = $this->handler->deserialize($this->deserializerVisitor, self::ENCODED, [], $this->context);
+        $value = 'test@ergonode.com';
 
-        $this->assertInstanceOf(Password::class, $result);
-        $this->assertEquals(self::DECODED, $result->getValue());
+        $result = $this->handler->deserialize($this->deserializerVisitor, $value, [], $this->context);
+
+        $this->assertInstanceOf(Email::class, $result);
+        $this->assertEquals($value, $result->getValue());
     }
 }
