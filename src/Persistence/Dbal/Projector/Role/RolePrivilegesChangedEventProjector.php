@@ -10,7 +10,7 @@ declare(strict_types = 1);
 namespace Ergonode\Account\Persistence\Dbal\Projector\Role;
 
 use Doctrine\DBAL\Connection;
-use Ergonode\Account\Domain\Event\Role\RoleCreatedEvent;
+use Ergonode\Account\Domain\Event\Role\RolePrivilegesChangedEvent;
 use Ergonode\Core\Domain\Entity\AbstractId;
 use Ergonode\EventSourcing\Infrastructure\DomainEventInterface;
 use Ergonode\EventSourcing\Infrastructure\Exception\UnsupportedEventException;
@@ -18,7 +18,7 @@ use Ergonode\EventSourcing\Infrastructure\Projector\DomainEventProjectorInterfac
 
 /**
  */
-class RoleCreatedEventProjector implements DomainEventProjectorInterface
+class RolePrivilegesChangedEventProjector implements DomainEventProjectorInterface
 {
     private const TABLE = 'roles';
 
@@ -42,7 +42,7 @@ class RoleCreatedEventProjector implements DomainEventProjectorInterface
      */
     public function support(DomainEventInterface $event): bool
     {
-        return $event instanceof RoleCreatedEvent;
+        return $event instanceof RolePrivilegesChangedEvent;
     }
 
     /**
@@ -54,18 +54,18 @@ class RoleCreatedEventProjector implements DomainEventProjectorInterface
      */
     public function projection(AbstractId $aggregateId, DomainEventInterface $event): void
     {
-        if (!$event instanceof RoleCreatedEvent) {
-            throw new UnsupportedEventException($event, RoleCreatedEvent::class);
+        if (!$event instanceof RolePrivilegesChangedEvent) {
+            throw new UnsupportedEventException($event, RolePrivilegesChangedEvent::class);
         }
 
-        $this->connection->transactional(function () use ($event) {
-            $this->connection->insert(
+        $this->connection->transactional(function () use ($event, $aggregateId) {
+            $this->connection->update(
                 self::TABLE,
                 [
-                    'id' => $event->getId()->getValue(),
-                    'name' => $event->getName(),
-                    'description' => $event->getDescription(),
-                    'privileges' => json_encode($event->getPrivileges()),
+                    'privileges' => json_encode($event->getTo()),
+                ],
+                [
+                    'id' => $aggregateId->getValue(),
                 ]
             );
         });

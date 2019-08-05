@@ -12,22 +12,15 @@ namespace Ergonode\Account\Domain\Provider;
 use Ergonode\Account\Domain\Query\PrivilegeQueryInterface;
 use Ergonode\Account\Domain\ValueObject\Privilege;
 use Ergonode\Account\Infrastructure\Resolver\PrivilegeTypeResolverInterface;
-use Ergonode\Core\Domain\ValueObject\Language;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  */
-class PrivilegeDictionaryProvider
+class PrivilegeGroupedByAreaProvider
 {
     /**
      * @var PrivilegeQueryInterface
      */
     private $query;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
 
     /**
      * @var PrivilegeTypeResolverInterface
@@ -36,34 +29,27 @@ class PrivilegeDictionaryProvider
 
     /**
      * @param PrivilegeQueryInterface        $query
-     * @param TranslatorInterface            $translator
      * @param PrivilegeTypeResolverInterface $resolver
      */
     public function __construct(
         PrivilegeQueryInterface $query,
-        TranslatorInterface $translator,
         PrivilegeTypeResolverInterface $resolver
     ) {
         $this->query = $query;
-        $this->translator = $translator;
         $this->resolver = $resolver;
     }
 
     /**
-     * @param Language $language
-     *
      * @return array
      */
-    public function provide(Language $language): array
+    public function provide(): array
     {
         $result = [];
         foreach ($this->query->getPrivileges() as $record) {
-            $privilege = new Privilege($record['code']);
-            $privilegeType = $this->resolver->resolve($privilege);
-            $result[$record['area']]['name'] = $this->translator->trans($record['area'], [], 'privilege', $language->getCode());
-            $result[$record['area']]['privileges'][$privilegeType] = $privilege;
+            $privilegeType = $this->resolver->resolve(new Privilege($record['code']));
+            $result[$record['area']][$privilegeType] = $record['code'];
         }
 
-        return array_values($result);
+        return $result;
     }
 }

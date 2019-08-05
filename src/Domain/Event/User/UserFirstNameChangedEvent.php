@@ -7,12 +7,12 @@
 
 declare(strict_types = 1);
 
-namespace Ergonode\Account\Domain\Event\Role;
+namespace Ergonode\Account\Domain\Event\User;
 
 use Ergonode\Core\Domain\Event\AbstractStringBasedChangedEvent;
 
 /**
  */
-class RoleDescriptionChangedEvent extends AbstractStringBasedChangedEvent
+class UserFirstNameChangedEvent extends AbstractStringBasedChangedEvent
 {
 }
