@@ -7,21 +7,28 @@
 
 declare(strict_types = 1);
 
-namespace Ergonode\Account\Domain\Command\User;
+namespace Ergonode\Account\Domain\Command;
 
 use Ergonode\Account\Domain\Entity\RoleId;
 use Ergonode\Account\Domain\Entity\UserId;
+use Ergonode\Account\Domain\ValueObject\Email;
 use Ergonode\Account\Domain\ValueObject\Password;
 use Ergonode\Core\Domain\ValueObject\Language;
+use Ergonode\Multimedia\Domain\Entity\MultimediaId;
 
 /**
  */
-class UpdateUserCommand
+class CreateUserCommand
 {
     /**
      * @var UserId
      */
     private $id;
+
+    /**
+     * @var MultimediaId|null
+     */
+    private $avatarId;
 
     /**
      * @var string
@@ -34,7 +41,12 @@ class UpdateUserCommand
     private $lastName;
 
     /**
-     * @var Password|null
+     * @var Email
+     */
+    private $email;
+
+    /**
+     * @var Password
      */
     private $password;
 
@@ -49,35 +61,26 @@ class UpdateUserCommand
     private $roleId;
 
     /**
-     * @var bool
+     * @param string            $firstName
+     * @param string            $lastName
+     * @param Email             $email
+     * @param Language          $language
+     * @param Password          $password
+     * @param RoleId            $roleId
+     * @param MultimediaId|null $avatarId
+     *
+     * @throws \Exception
      */
-    private $isActive;
-
-    /**
-     * @param UserId        $id
-     * @param string        $firstName
-     * @param string        $lastName
-     * @param Language      $language
-     * @param RoleId        $roleId
-     * @param bool          $isActive
-     * @param Password|null $password
-     */
-    public function __construct(
-        UserId $id,
-        string $firstName,
-        string $lastName,
-        Language $language,
-        RoleId $roleId,
-        bool $isActive,
-        ?Password $password = null
-    ) {
-        $this->id = $id;
-        $this->roleId = $roleId;
+    public function __construct(string $firstName, string $lastName, Email $email, Language $language, Password $password, RoleId $roleId, ?MultimediaId $avatarId = null)
+    {
+        $this->id = UserId::fromEmail($email);
+        $this->avatarId = $avatarId;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->language = $language;
-        $this->isActive = $isActive;
+        $this->email = $email;
         $this->password = $password;
+        $this->language = $language;
+        $this->roleId = $roleId;
     }
 
     /**
@@ -89,11 +92,11 @@ class UpdateUserCommand
     }
 
     /**
-     * @return RoleId
+     * @return MultimediaId|null
      */
-    public function getRoleId(): RoleId
+    public function getAvatarId(): ?MultimediaId
     {
-        return $this->roleId;
+        return $this->avatarId;
     }
 
     /**
@@ -113,9 +116,17 @@ class UpdateUserCommand
     }
 
     /**
-     * @return Password|null
+     * @return Email
      */
-    public function getPassword(): ?Password
+    public function getEmail(): Email
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return Password
+     */
+    public function getPassword(): Password
     {
         return $this->password;
     }
@@ -129,10 +140,10 @@ class UpdateUserCommand
     }
 
     /**
-     * @return bool
+     * @return RoleId
      */
-    public function isActive(): bool
+    public function getRoleId(): RoleId
     {
-        return $this->isActive;
+        return $this->roleId;
     }
 }
