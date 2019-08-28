@@ -7,7 +7,7 @@
 
 declare(strict_types = 1);
 
-namespace Ergonode\Account\Domain\Command\User;
+namespace Ergonode\Account\Domain\Command;
 
 use Ergonode\Account\Domain\Entity\UserId;
 use Ergonode\Multimedia\Domain\Entity\MultimediaId;
