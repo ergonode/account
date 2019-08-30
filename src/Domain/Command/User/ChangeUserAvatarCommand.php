@@ -2,12 +2,12 @@
 
 /**
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
- * See license.txt for license details.
+ * See LICENSE.txt for license details.
  */
 
 declare(strict_types = 1);
 
-namespace Ergonode\Account\Domain\Command;
+namespace Ergonode\Account\Domain\Command\User;
 
 use Ergonode\Account\Domain\Entity\UserId;
 use Ergonode\Multimedia\Domain\Entity\MultimediaId;

@@ -2,14 +2,14 @@
 
 /**
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
- * See license.txt for license details.
+ * See LICENSE.txt for license details.
  */
 
 declare(strict_types = 1);
 
-namespace Ergonode\Account\Tests\Domain\Command;
+namespace Ergonode\Account\Tests\Domain\Command\User;
 
-use Ergonode\Account\Domain\Command\ChangeUserPasswordCommand;
+use Ergonode\Account\Domain\Command\User\ChangeUserPasswordCommand;
 use Ergonode\Account\Domain\Entity\UserId;
 use Ergonode\Account\Domain\ValueObject\Password;
 use PHPUnit\Framework\MockObject\MockObject;

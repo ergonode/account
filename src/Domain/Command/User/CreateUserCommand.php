@@ -2,12 +2,12 @@
 
 /**
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
- * See license.txt for license details.
+ * See LICENSE.txt for license details.
  */
 
 declare(strict_types = 1);
 
-namespace Ergonode\Account\Domain\Command;
+namespace Ergonode\Account\Domain\Command\User;
 
 use Ergonode\Account\Domain\Entity\RoleId;
 use Ergonode\Account\Domain\Entity\UserId;
@@ -61,18 +61,32 @@ class CreateUserCommand
     private $roleId;
 
     /**
+     * @var bool
+     */
+    private $isActive;
+
+    /**
      * @param string            $firstName
      * @param string            $lastName
      * @param Email             $email
      * @param Language          $language
      * @param Password          $password
      * @param RoleId            $roleId
+     * @param bool              $isActive
      * @param MultimediaId|null $avatarId
      *
      * @throws \Exception
      */
-    public function __construct(string $firstName, string $lastName, Email $email, Language $language, Password $password, RoleId $roleId, ?MultimediaId $avatarId = null)
-    {
+    public function __construct(
+        string $firstName,
+        string $lastName,
+        Email $email,
+        Language $language,
+        Password $password,
+        RoleId $roleId,
+        bool $isActive = true,
+        ?MultimediaId $avatarId = null
+    ) {
         $this->id = UserId::fromEmail($email);
         $this->avatarId = $avatarId;
         $this->firstName = $firstName;
@@ -81,6 +95,7 @@ class CreateUserCommand
         $this->password = $password;
         $this->language = $language;
         $this->roleId = $roleId;
+        $this->isActive = $isActive;
     }
 
     /**
@@ -145,5 +160,13 @@ class CreateUserCommand
     public function getRoleId(): RoleId
     {
         return $this->roleId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->isActive;
     }
 }
