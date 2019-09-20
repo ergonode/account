@@ -2,14 +2,14 @@
 
 /**
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
- * See license.txt for license details.
+ * See LICENSE.txt for license details.
  */
 
 declare(strict_types = 1);
 
-namespace Ergonode\Account\Tests\Domain\Command;
+namespace Ergonode\Account\Tests\Domain\Command\User;
 
-use Ergonode\Account\Domain\Command\ChangeUserAvatarCommand;
+use Ergonode\Account\Domain\Command\User\ChangeUserAvatarCommand;
 use Ergonode\Account\Domain\Entity\UserId;
 use Ergonode\Multimedia\Domain\Entity\MultimediaId;
 use PHPUnit\Framework\MockObject\MockObject;

@@ -2,12 +2,12 @@
 
 /**
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
- * See license.txt for license details.
+ * See LICENSE.txt for license details.
  */
 
 declare(strict_types = 1);
 
-namespace Ergonode\Account\Domain\Command;
+namespace Ergonode\Account\Domain\Command\User;
 
 use Ergonode\Account\Domain\Entity\RoleId;
 use Ergonode\Account\Domain\Entity\UserId;
@@ -49,11 +49,17 @@ class UpdateUserCommand
     private $roleId;
 
     /**
+     * @var bool
+     */
+    private $isActive;
+
+    /**
      * @param UserId        $id
      * @param string        $firstName
      * @param string        $lastName
      * @param Language      $language
      * @param RoleId        $roleId
+     * @param bool          $isActive
      * @param Password|null $password
      */
     public function __construct(
@@ -62,6 +68,7 @@ class UpdateUserCommand
         string $lastName,
         Language $language,
         RoleId $roleId,
+        bool $isActive,
         ?Password $password = null
     ) {
         $this->id = $id;
@@ -69,6 +76,7 @@ class UpdateUserCommand
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->language = $language;
+        $this->isActive = $isActive;
         $this->password = $password;
     }
 
@@ -118,5 +126,13 @@ class UpdateUserCommand
     public function getLanguage(): Language
     {
         return $this->language;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->isActive;
     }
 }
