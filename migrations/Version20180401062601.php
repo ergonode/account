@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  */
-final class Version20180610062601 extends AbstractErgonodeMigration
+final class Version20180401062601 extends AbstractErgonodeMigration
 {
     /**
      * @param Schema $schema
@@ -47,21 +47,46 @@ final class Version20180610062601 extends AbstractErgonodeMigration
             CREATE TABLE roles (
                 id UUID NOT NULL, 
                 name VARCHAR(100) NOT NULL,
-                description VARCHAR(500) NOT NULL,          
+                description VARCHAR(500) NOT NULL,  
+                hidden BOOL NOT NULL,       
                 PRIMARY KEY(id)
             )
         ');
         $this->addSql('CREATE UNIQUE INDEX role_name_key ON roles (name)');
 
-        $this->addSql('INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)', [Uuid::uuid4()->toString(), 'USER_ROLE_CREATE', 'Role']);
-        $this->addSql('INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)', [Uuid::uuid4()->toString(), 'USER_ROLE_READ', 'Role']);
-        $this->addSql('INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)', [Uuid::uuid4()->toString(), 'USER_ROLE_UPDATE', 'Role']);
-        $this->addSql('INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)', [Uuid::uuid4()->toString(), 'USER_ROLE_DELETE', 'Role']);
+        $this->addSql(
+            'INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)',
+            [Uuid::uuid4()->toString(), 'USER_ROLE_CREATE', 'Role']
+        );
+        $this->addSql(
+            'INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)',
+            [Uuid::uuid4()->toString(), 'USER_ROLE_READ', 'Role']
+        );
+        $this->addSql(
+            'INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)',
+            [Uuid::uuid4()->toString(), 'USER_ROLE_UPDATE', 'Role']
+        );
+        $this->addSql(
+            'INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)',
+            [Uuid::uuid4()->toString(), 'USER_ROLE_DELETE', 'Role']
+        );
 
-        $this->addSql('INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)', [Uuid::uuid4()->toString(), 'USER_CREATE', 'User']);
-        $this->addSql('INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)', [Uuid::uuid4()->toString(), 'USER_READ', 'User']);
-        $this->addSql('INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)', [Uuid::uuid4()->toString(), 'USER_UPDATE', 'User']);
-        $this->addSql('INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)', [Uuid::uuid4()->toString(), 'USER_DELETE', 'User']);
+        $this->addSql(
+            'INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)',
+            [Uuid::uuid4()->toString(), 'USER_CREATE', 'User']
+        );
+        $this->addSql(
+            'INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)',
+            [Uuid::uuid4()->toString(), 'USER_READ', 'User']
+        );
+        $this->addSql(
+            'INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)',
+            [Uuid::uuid4()->toString(), 'USER_UPDATE', 'User']
+        );
+        $this->addSql(
+            'INSERT INTO privileges (id, code, area) VALUES (?, ?, ?)',
+            [Uuid::uuid4()->toString(), 'USER_DELETE', 'User']
+        );
 
         $this->addSql('ALTER TABLE roles ADD privileges json DEFAULT NULL');
 
