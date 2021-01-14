@@ -7,19 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Application\Validator\Constraints;
+namespace Ergonode\Account\Application\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
 /**
  * @Annotation
  */
-class ConstraintPrivilegeRelations extends Constraint
+class PrivilegeRelations extends Constraint
 {
     public string $message = 'Read privilege must be set when create, update or delete is activated';
-
-    public function validatedBy(): string
-    {
-        return ConstraintPrivilegeRelationsValidator::class;
-    }
 }

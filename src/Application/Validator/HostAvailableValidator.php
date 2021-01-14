@@ -6,14 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Application\Validator\Constraints;
+namespace Ergonode\Account\Application\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Webmozart\Assert\Assert;
 
-class AvailableHostConstraintValidator extends ConstraintValidator
+class HostAvailableValidator extends ConstraintValidator
 {
     private array $hosts;
 
@@ -25,12 +25,12 @@ class AvailableHostConstraintValidator extends ConstraintValidator
 
     /**
      * @param mixed                              $value
-     * @param AvailableHostConstraint|Constraint $constraint
+     * @param HostAvailable|Constraint $constraint
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$constraint instanceof AvailableHostConstraint) {
-            throw new UnexpectedTypeException($constraint, AvailableHostConstraint::class);
+        if (!$constraint instanceof HostAvailable) {
+            throw new UnexpectedTypeException($constraint, HostAvailable::class);
         }
 
         if (null === $value || '' === $value) {

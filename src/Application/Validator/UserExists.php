@@ -7,14 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Application\Validator\Constraints;
+namespace Ergonode\Account\Application\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
 /**
  * @Annotation
  */
-class ConstraintLanguageActive extends Constraint
+class UserExists extends Constraint
 {
-    public string $message = 'Language code {{ value }} is not active';
+    public string $message = 'User {{ value }} not exists.';
 }

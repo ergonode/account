@@ -6,14 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Tests\Application\Validator\Constraints;
+namespace Ergonode\Account\Tests\Application\Validator;
 
-use Ergonode\Account\Application\Validator\Constraints\AvailableHostConstraint;
-use Ergonode\Account\Application\Validator\Constraints\AvailableHostConstraintValidator;
+use Ergonode\Account\Application\Validator\HostAvailable;
+use Ergonode\Account\Application\Validator\HostAvailableValidator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class AvailableHostConstraintValidatorTest extends ConstraintValidatorTestCase
+class HostAvailableValidatorTest extends ConstraintValidatorTestCase
 {
     private array $sites;
 
@@ -30,7 +30,7 @@ class AvailableHostConstraintValidatorTest extends ConstraintValidatorTestCase
     public function testWrongValueProvided(): void
     {
         $this->expectException(\Symfony\Component\Validator\Exception\UnexpectedTypeException::class);
-        $this->validator->validate(new \stdClass(), new AvailableHostConstraint());
+        $this->validator->validate(new \stdClass(), new HostAvailable());
     }
 
     public function testWrongConstraintProvided(): void
@@ -43,35 +43,35 @@ class AvailableHostConstraintValidatorTest extends ConstraintValidatorTestCase
 
     public function testCorrectEmptyValidation(): void
     {
-        $this->validator->validate('', new AvailableHostConstraint());
+        $this->validator->validate('', new HostAvailable());
 
         $this->assertNoViolation();
     }
 
     public function testCorrectHostValueValidation(): void
     {
-        $this->validator->validate('http://localhost/test', new AvailableHostConstraint());
+        $this->validator->validate('http://localhost/test', new HostAvailable());
 
         $this->assertNoViolation();
     }
 
     public function testCorrectIpValueValidation(): void
     {
-        $this->validator->validate('http://127.0.0.1/test', new AvailableHostConstraint());
+        $this->validator->validate('http://127.0.0.1/test', new HostAvailable());
 
         $this->assertNoViolation();
     }
 
     public function testCorrectErgonodeHostValueValidation(): void
     {
-        $this->validator->validate('https://ergonode.com/test', new AvailableHostConstraint());
+        $this->validator->validate('https://ergonode.com/test', new HostAvailable());
 
         $this->assertNoViolation();
     }
 
     public function testInCorrectValueValidation(): void
     {
-        $constraint = new AvailableHostConstraint();
+        $constraint = new HostAvailable();
         $value = 'site';
         $this->validator->validate($value, $constraint);
 
@@ -79,8 +79,8 @@ class AvailableHostConstraintValidatorTest extends ConstraintValidatorTestCase
         $assertion->assertRaised();
     }
 
-    protected function createValidator(): AvailableHostConstraintValidator
+    protected function createValidator(): HostAvailableValidator
     {
-        return new AvailableHostConstraintValidator($this->sites);
+        return new HostAvailableValidator($this->sites);
     }
 }

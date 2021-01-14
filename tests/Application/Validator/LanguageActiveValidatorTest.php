@@ -7,16 +7,16 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Tests\Application\Validator\Constraints;
+namespace Ergonode\Account\Tests\Application\Validator;
 
-use Ergonode\Account\Application\Validator\Constraints\ConstraintLanguageActive;
-use Ergonode\Account\Application\Validator\Constraints\ConstraintLanguageActiveValidator;
+use Ergonode\Account\Application\Validator\LanguageActive;
+use Ergonode\Account\Application\Validator\LanguageActiveValidator;
 use Ergonode\Core\Domain\Query\LanguageQueryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class ConstraintLanguageActiveValidatorTest extends ConstraintValidatorTestCase
+class LanguageActiveValidatorTest extends ConstraintValidatorTestCase
 {
     private LanguageQueryInterface $query;
 
@@ -29,7 +29,7 @@ class ConstraintLanguageActiveValidatorTest extends ConstraintValidatorTestCase
     public function testWrongValueProvided(): void
     {
         $this->expectException(UnexpectedTypeException::class);
-        $this->validator->validate(new \stdClass(), new ConstraintLanguageActive());
+        $this->validator->validate(new \stdClass(), new LanguageActive());
     }
 
     public function testWrongConstraintProvided(): void
@@ -44,7 +44,7 @@ class ConstraintLanguageActiveValidatorTest extends ConstraintValidatorTestCase
     {
         $value = ['code1' => 'code1'];
         $this->query->method('getDictionaryActive')->willReturn(['code1' => 'code1']);
-        $this->validator->validate($value, new ConstraintLanguageActive());
+        $this->validator->validate($value, new LanguageActive());
 
         $this->assertNoViolation();
     }
@@ -53,15 +53,15 @@ class ConstraintLanguageActiveValidatorTest extends ConstraintValidatorTestCase
     {
         $value = ['code1' => 'code1'];
         $this->query->method('getDictionaryActive')->willReturn(['code2' => 'code2']);
-        $constraint = new ConstraintLanguageActive();
+        $constraint = new LanguageActive();
         $this->validator->validate($value, $constraint);
         $assertion = $this->buildViolation($constraint->message)
             ->setParameter('{{ value }}', 'code1');
         $assertion->assertRaised();
     }
 
-    protected function createValidator(): ConstraintLanguageActiveValidator
+    protected function createValidator(): LanguageActiveValidator
     {
-        return new ConstraintLanguageActiveValidator($this->query);
+        return new LanguageActiveValidator($this->query);
     }
 }

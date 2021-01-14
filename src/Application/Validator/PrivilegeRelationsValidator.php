@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Application\Validator\Constraints;
+namespace Ergonode\Account\Application\Validator;
 
 use Ergonode\Account\Domain\Provider\PrivilegeGroupedByAreaProvider;
 use Symfony\Component\Validator\Constraint;
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-class ConstraintPrivilegeRelationsValidator extends ConstraintValidator
+class PrivilegeRelationsValidator extends ConstraintValidator
 {
     private PrivilegeGroupedByAreaProvider $privilegeGroupedByAreaProvider;
 
@@ -29,8 +29,8 @@ class ConstraintPrivilegeRelationsValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$constraint instanceof ConstraintPrivilegeRelations) {
-            throw new UnexpectedTypeException($constraint, ConstraintPrivilegeRelations::class);
+        if (!$constraint instanceof PrivilegeRelations) {
+            throw new UnexpectedTypeException($constraint, PrivilegeRelations::class);
         }
 
         if (!is_array($value)) {

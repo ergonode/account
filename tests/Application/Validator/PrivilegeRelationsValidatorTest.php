@@ -7,16 +7,16 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Tests\Application\Validator\Constraints;
+namespace Ergonode\Account\Tests\Application\Validator;
 
-use Ergonode\Account\Application\Validator\Constraints\ConstraintPrivilegeRelations;
-use Ergonode\Account\Application\Validator\Constraints\ConstraintPrivilegeRelationsValidator;
+use Ergonode\Account\Application\Validator\PrivilegeRelations;
+use Ergonode\Account\Application\Validator\PrivilegeRelationsValidator;
 use Ergonode\Account\Domain\Provider\PrivilegeGroupedByAreaProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class ConstraintPrivilegeRelationsValidatorTest extends TestCase
+class PrivilegeRelationsValidatorTest extends TestCase
 {
     /**
      * @param array $value
@@ -57,9 +57,9 @@ class ConstraintPrivilegeRelationsValidatorTest extends TestCase
             ->method('buildViolation')
             ->willReturn($constraintViolationBuilder);
 
-        $validator = new ConstraintPrivilegeRelationsValidator($provider);
+        $validator = new PrivilegeRelationsValidator($provider);
         $validator->initialize($context);
-        $validator->validate($value, new ConstraintPrivilegeRelations());
+        $validator->validate($value, new PrivilegeRelations());
     }
 
     /**
