@@ -6,14 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Application\Validator\Constraints;
+namespace Ergonode\Account\Application\Validator;
 
 use Ergonode\Account\Domain\Validator\TokenValidator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-class AvailableTokenConstraintValidator extends ConstraintValidator
+class TokenAvailableValidator extends ConstraintValidator
 {
     private TokenValidator $validator;
 
@@ -23,13 +23,13 @@ class AvailableTokenConstraintValidator extends ConstraintValidator
     }
 
     /**
-     * @param mixed                               $value
-     * @param Constraint|AvailableTokenConstraint $constraint
+     * @param mixed                     $value
+     * @param Constraint|TokenAvailable $constraint
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$constraint instanceof AvailableTokenConstraint) {
-            throw new UnexpectedTypeException($constraint, AvailableTokenConstraint::class);
+        if (!$constraint instanceof TokenAvailable) {
+            throw new UnexpectedTypeException($constraint, TokenAvailable::class);
         }
 
         if (null === $value || '' === $value) {

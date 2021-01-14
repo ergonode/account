@@ -7,38 +7,32 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Application\Validator\Constraints;
+namespace Ergonode\Account\Application\Validator;
 
-use Ergonode\Core\Domain\Query\LanguageQueryInterface;
+use Ergonode\Core\Domain\ValueObject\LanguagePrivileges;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-class ConstraintLanguageActiveValidator extends ConstraintValidator
+class LanguagePrivilegesRelationsValidator extends ConstraintValidator
 {
-    private LanguageQueryInterface $query;
-
-    public function __construct(LanguageQueryInterface $query)
-    {
-        $this->query = $query;
-    }
-
-
     /**
      * @param mixed $value
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$constraint instanceof ConstraintLanguageActive) {
-            throw new UnexpectedTypeException($constraint, ConstraintLanguageActive::class);
+        if (!$constraint instanceof LanguagePrivilegesRelations) {
+            throw new UnexpectedTypeException($constraint, LanguagePrivilegesRelations::class);
         }
 
         if (!is_array($value)) {
             throw new UnexpectedValueException($value, 'array');
         }
-        foreach (array_keys($value) as $languageCode) {
-            if (!in_array($languageCode, $this->query->getDictionaryActive(), true)) {
+
+        /** @var LanguagePrivileges $item */
+        foreach ($value as $languageCode => $item) {
+            if ($item->isEditable() && !$item->isReadable()) {
                 $this->context->buildViolation($constraint->message)
                     ->setParameter('{{ value }}', $languageCode)
                     ->addViolation();

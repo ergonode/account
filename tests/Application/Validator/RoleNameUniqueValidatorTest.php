@@ -7,17 +7,17 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Tests\Infrastructure\Validator;
+namespace Ergonode\Account\Tests\Application\Validator;
 
 use Ergonode\Account\Application\Form\Model\RoleFormModel;
 use Ergonode\Account\Domain\Query\RoleQueryInterface;
-use Ergonode\Account\Infrastructure\Validator\RoleNameUnique;
-use Ergonode\Account\Infrastructure\Validator\RoleNameUniqueValidator;
 use Ergonode\SharedKernel\Domain\Aggregate\RoleId;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use Ergonode\Account\Application\Validator\RoleNameUnique;
+use Ergonode\Account\Application\Validator\RoleNameUniqueValidator;
 
 class RoleNameUniqueValidatorTest extends ConstraintValidatorTestCase
 {

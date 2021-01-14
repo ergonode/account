@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Infrastructure\Validator;
+namespace Ergonode\Account\Application\Validator;
 
 use Ergonode\Account\Application\Form\Model\RoleFormModel;
 use Ergonode\Account\Domain\Query\RoleQueryInterface;

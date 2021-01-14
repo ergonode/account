@@ -7,10 +7,10 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Tests\Application\Validator\Constraints;
+namespace Ergonode\Account\Tests\Application\Validator;
 
-use Ergonode\Account\Application\Validator\Constraints\UserUnique;
-use Ergonode\Account\Application\Validator\Constraints\UserUniqueValidator;
+use Ergonode\Account\Application\Validator\UserUnique;
+use Ergonode\Account\Application\Validator\UserUniqueValidator;
 use Ergonode\Account\Domain\Query\UserQueryInterface;
 use Ergonode\SharedKernel\Domain\Aggregate\UserId;
 use PHPUnit\Framework\MockObject\MockObject;

@@ -7,33 +7,33 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Infrastructure\Validator;
+namespace Ergonode\Account\Application\Validator;
 
-use Ergonode\SharedKernel\Domain\Aggregate\UserId;
-use Ergonode\Account\Domain\Repository\UserRepositoryInterface;
+use Ergonode\SharedKernel\Domain\Aggregate\RoleId;
+use Ergonode\Account\Domain\Repository\RoleRepositoryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-class UserExistsValidator extends ConstraintValidator
+class RoleExistsValidator extends ConstraintValidator
 {
-    private UserRepositoryInterface $userRepository;
+    private RoleRepositoryInterface $roleRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(RoleRepositoryInterface $roleRepository)
     {
-        $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     /**
      * @param mixed                 $value
-     * @param UserExists|Constraint $constraint
+     * @param RoleExists|Constraint $constraint
      *
      * @throws \ReflectionException
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$constraint instanceof UserExists) {
-            throw new UnexpectedTypeException($constraint, UserExists::class);
+        if (!$constraint instanceof RoleExists) {
+            throw new UnexpectedTypeException($constraint, RoleExists::class);
         }
 
         if (null === $value || '' === $value) {
@@ -47,8 +47,8 @@ class UserExistsValidator extends ConstraintValidator
         $value = (string) $value;
 
         $attribute = false;
-        if (UserId::isValid($value)) {
-            $attribute = $this->userRepository->load(new UserId($value));
+        if (RoleId::isValid($value)) {
+            $attribute = $this->roleRepository->load(new RoleId($value));
         }
 
         if (!$attribute) {

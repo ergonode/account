@@ -6,16 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Tests\Application\Validator\Constraints;
+namespace Ergonode\Account\Tests\Application\Validator;
 
-use Ergonode\Account\Application\Validator\Constraints\AvailableTokenConstraint;
-use Ergonode\Account\Application\Validator\Constraints\AvailableTokenConstraintValidator;
+use Ergonode\Account\Application\Validator\TokenAvailable;
+use Ergonode\Account\Application\Validator\TokenAvailableValidator;
 use Ergonode\Account\Domain\Validator\TokenValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class AvailableTokenConstraintValidatorTest extends ConstraintValidatorTestCase
+class TokenAvailableValidatorTest extends ConstraintValidatorTestCase
 {
     /**
      * @var TokenValidator|MockObject
@@ -32,7 +32,7 @@ class AvailableTokenConstraintValidatorTest extends ConstraintValidatorTestCase
     public function testWrongValueProvided(): void
     {
         $this->expectException(\Symfony\Component\Validator\Exception\UnexpectedTypeException::class);
-        $this->validator->validate(new \stdClass(), new AvailableTokenConstraint());
+        $this->validator->validate(new \stdClass(), new TokenAvailable());
     }
 
     public function testWrongConstraintProvided(): void
@@ -45,7 +45,7 @@ class AvailableTokenConstraintValidatorTest extends ConstraintValidatorTestCase
 
     public function testCorrectEmptyValidation(): void
     {
-        $this->validator->validate('', new AvailableTokenConstraint());
+        $this->validator->validate('', new TokenAvailable());
 
         $this->assertNoViolation();
     }
@@ -55,7 +55,7 @@ class AvailableTokenConstraintValidatorTest extends ConstraintValidatorTestCase
         $this->tokenValidator->method('validate')
             ->willReturn(true);
 
-        $this->validator->validate('test', new AvailableTokenConstraint());
+        $this->validator->validate('test', new TokenAvailable());
 
         $this->assertNoViolation();
     }
@@ -65,7 +65,7 @@ class AvailableTokenConstraintValidatorTest extends ConstraintValidatorTestCase
         $this->tokenValidator->method('validate')
             ->willReturn(false);
 
-        $constraint = new AvailableTokenConstraint();
+        $constraint = new TokenAvailable();
         $value = 'test';
         $this->validator->validate($value, $constraint);
 
@@ -73,8 +73,8 @@ class AvailableTokenConstraintValidatorTest extends ConstraintValidatorTestCase
         $assertion->assertRaised();
     }
 
-    protected function createValidator(): AvailableTokenConstraintValidator
+    protected function createValidator(): TokenAvailableValidator
     {
-        return new AvailableTokenConstraintValidator($this->tokenValidator);
+        return new TokenAvailableValidator($this->tokenValidator);
     }
 }

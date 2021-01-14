@@ -7,14 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Infrastructure\Validator;
+namespace Ergonode\Account\Application\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
 /**
  * @Annotation
  */
-class RoleExists extends Constraint
+class LanguagePrivilegesRelations extends Constraint
 {
-    public string $message = 'Role {{ value }} not exists.';
+    public string $message = 'Read language privilege for {{ value }} must be set when edit is activated';
 }

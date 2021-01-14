@@ -7,16 +7,16 @@
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Tests\Application\Validator\Constraints;
+namespace Ergonode\Account\Tests\Application\Validator;
 
-use Ergonode\Account\Application\Validator\Constraints\ConstraintLanguageCodeExists;
-use Ergonode\Account\Application\Validator\Constraints\ConstraintLanguageCodeExistsValidator;
+use Ergonode\Account\Application\Validator\LanguageCodeExists;
+use Ergonode\Account\Application\Validator\LanguageCodeExistsValidator;
 use Ergonode\Core\Domain\Query\LanguageQueryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class ConstraintLanguageCodeExistsValidatorTest extends ConstraintValidatorTestCase
+class LanguageCodeExistsValidatorTest extends ConstraintValidatorTestCase
 {
     private LanguageQueryInterface $query;
 
@@ -29,7 +29,7 @@ class ConstraintLanguageCodeExistsValidatorTest extends ConstraintValidatorTestC
     public function testWrongValueProvided(): void
     {
         $this->expectException(UnexpectedTypeException::class);
-        $this->validator->validate(new \stdClass(), new ConstraintLanguageCodeExists());
+        $this->validator->validate(new \stdClass(), new LanguageCodeExists());
     }
 
     public function testWrongConstraintProvided(): void
@@ -44,7 +44,7 @@ class ConstraintLanguageCodeExistsValidatorTest extends ConstraintValidatorTestC
     {
         $value = ['code1' => 'code1'];
         $this->query->method('getDictionary')->willReturn(['code1' => 'code1']);
-        $this->validator->validate($value, new ConstraintLanguageCodeExists());
+        $this->validator->validate($value, new LanguageCodeExists());
 
         $this->assertNoViolation();
     }
@@ -53,15 +53,15 @@ class ConstraintLanguageCodeExistsValidatorTest extends ConstraintValidatorTestC
     {
         $value = ['code1' => 'code1'];
         $this->query->method('getDictionary')->willReturn(['code2' => 'code2']);
-        $constraint = new ConstraintLanguageCodeExists();
+        $constraint = new LanguageCodeExists();
         $this->validator->validate($value, $constraint);
         $assertion = $this->buildViolation($constraint->message)
             ->setParameter('{{ value }}', 'code1');
         $assertion->assertRaised();
     }
 
-    protected function createValidator(): ConstraintLanguageCodeExistsValidator
+    protected function createValidator(): LanguageCodeExistsValidator
     {
-        return new ConstraintLanguageCodeExistsValidator($this->query);
+        return new LanguageCodeExistsValidator($this->query);
     }
 }

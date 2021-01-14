@@ -2,38 +2,38 @@
 
 /**
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
- * See license.txt for license details.
+ * See LICENSE.txt for license details.
  */
 
 declare(strict_types=1);
 
-namespace Ergonode\Account\Application\Validator\Constraints;
+namespace Ergonode\Account\Application\Validator;
 
-use Ergonode\Account\Domain\Query\UserQueryInterface;
-use Ergonode\SharedKernel\Domain\ValueObject\Email;
+use Ergonode\SharedKernel\Domain\Aggregate\UserId;
+use Ergonode\Account\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-class UserUniqueValidator extends ConstraintValidator
+class UserExistsValidator extends ConstraintValidator
 {
-    private UserQueryInterface $query;
+    private UserRepositoryInterface $userRepository;
 
-    public function __construct(UserQueryInterface $query)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->query = $query;
+        $this->userRepository = $userRepository;
     }
 
     /**
      * @param mixed                 $value
-     * @param UserUnique|Constraint $constraint
+     * @param UserExists|Constraint $constraint
      *
-     * @throws \Exception
+     * @throws \ReflectionException
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$constraint instanceof UserUnique) {
-            throw new UnexpectedTypeException($constraint, UserUnique::class);
+        if (!$constraint instanceof UserExists) {
+            throw new UnexpectedTypeException($constraint, UserExists::class);
         }
 
         if (null === $value || '' === $value) {
@@ -46,12 +46,12 @@ class UserUniqueValidator extends ConstraintValidator
 
         $value = (string) $value;
 
-        $userId = null;
-        if (Email::isValid($value)) {
-            $userId = $this->query->findIdByEmail(new Email($value));
+        $attribute = false;
+        if (UserId::isValid($value)) {
+            $attribute = $this->userRepository->load(new UserId($value));
         }
 
-        if ($userId) {
+        if (!$attribute) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();
